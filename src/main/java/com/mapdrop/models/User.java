@@ -41,9 +41,9 @@ public class User {
 
     private LocalDateTime updatedAt;
 
-    /*@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
 //    @JsonManagedReference
-    private List<Game> gamesHistory;*/
+    private List<Game> gamesHistory;
 
     public User(String username, String email, String password) {
         this.username = username;

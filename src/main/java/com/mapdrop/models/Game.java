@@ -16,6 +16,7 @@ public class Game {
     private int id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name="points")
