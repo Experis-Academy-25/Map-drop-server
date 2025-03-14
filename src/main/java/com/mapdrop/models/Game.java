@@ -1,0 +1,38 @@
+package com.mapdrop.models;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.time.LocalDateTime;
+
+@Data
+@Entity
+@Table(name = "games")
+public class Game {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @ManyToOne
+    private User user;
+
+    @Column(name="points")
+    private double points;
+
+    @Column(name="location")
+    private String location;
+
+    @Column(name="coordinate_guess")
+    private Point coordinateGuess;
+
+    @Column(name="coordinate_real")
+    private Point coordinateReal;
+
+    @Column(name="created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name="updated_at")
+    private LocalDateTime updatedAt;
+}
