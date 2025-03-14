@@ -1,18 +1,13 @@
 package com.mapdrop.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "games")
 public class Game {
@@ -20,7 +15,7 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "user")
+    @ManyToOne
     private User user;
 
     @Column(name="points")
@@ -30,10 +25,10 @@ public class Game {
     private String location;
 
     @Column(name="coordinate_guess")
-    private Point2D coordinateGuess;
+    private Point coordinateGuess;
 
     @Column(name="coordinate_real")
-    private Point2D coordinateReal;
+    private Point coordinateReal;
 
     @Column(name="created_at")
     private LocalDateTime createdAt;
