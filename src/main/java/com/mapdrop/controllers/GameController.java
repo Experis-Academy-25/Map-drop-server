@@ -34,7 +34,6 @@ public class GameController {
             errorResponse.set("not found");
             return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
         }
-        //playingUser.getGamesHistory().add(game);
         game.setUser(playingUser);
 
         try {
