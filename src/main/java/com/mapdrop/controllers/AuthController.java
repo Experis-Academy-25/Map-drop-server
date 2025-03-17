@@ -69,6 +69,24 @@ public class AuthController {
         if (userRepository.existsByEmail(signupRequest.getEmail())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
         }
+
+        // Check if valid email format
+        // This regex can probably be simplified
+        if (!signupRequest.getEmail().matches("[[[a-z]|[0-9]]+[.]*]*@[[[a-z]|[0-9]]+[.]*]*[[a-z]|[0-9]]+[.]+[[a-z][0-9]]+")) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is not valid format"));
+        }
+
+        // Check if valid password
+        if (signupRequest.getPassword().length() < 8 ||
+                // What it does: for each constraint like "contains at least one of", checks if valid
+                !signupRequest.getPassword().matches(".*[-!\"#$%&()*,./:;?@^_`{|}~+<=>].*") ||
+                !signupRequest.getPassword().matches(".*[a-z].*") ||
+                !signupRequest.getPassword().matches(".*[A-Z].*") ||
+                !signupRequest.getPassword().matches(".*[0-9].*")
+        ) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: Password not following complexity requirements"));
+        }
+
         // Create a new user add salt here if using one
         User user = new User(signupRequest.getUsername(), signupRequest.getEmail(), encoder.encode(signupRequest.getPassword()));
         LocalDateTime now = LocalDateTime.now();
