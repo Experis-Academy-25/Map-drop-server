@@ -1,6 +1,7 @@
 package com.mapdrop.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -45,6 +46,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
 //    @JsonManagedReference
+    @JsonIgnore
     private List<Game> gamesHistory;
 
     // make one?

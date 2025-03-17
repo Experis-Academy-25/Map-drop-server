@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
 @Data
 @Entity
 @Table(name = "games")
@@ -36,4 +37,11 @@ public class Game {
 
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
+
+    public Game(double points, String location) {
+        this.points = points;
+        this.location = location;
+    }
+
+    public Game(int id) {this.id = id; }
 }
