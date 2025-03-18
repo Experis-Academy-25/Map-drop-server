@@ -45,7 +45,7 @@ public class UserController {
         return ResponseEntity.ok(userListResponse);
     }
 
-    @GetMapping("/get_by_username/{username}")
+    @GetMapping("/username/{username}")
     public ResponseEntity<Response<?>> getUserByUsername(@PathVariable String username) {
         User user = userRepository.findByUsername(username).orElse(null);
         if (user == null) {
@@ -59,7 +59,7 @@ public class UserController {
         return ResponseEntity.ok(userResponse);
     }
 
-    @GetMapping("/get_by_email/{email}")
+    @GetMapping("/email/{email}")
     public ResponseEntity<Response<?>> getUserByEmail(@PathVariable String email) {
         User user = userRepository.findByEmail(email).orElse(null);
         if (user == null) {
