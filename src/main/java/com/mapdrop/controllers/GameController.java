@@ -11,6 +11,7 @@ import com.mapdrop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,13 +28,17 @@ public class GameController {
     private GameListResponse gameListResponse = new GameListResponse();
 
     @PostMapping("{user_id}")
-    public ResponseEntity<Response<?>> createGame(@RequestBody Game game, @PathVariable(name = "user_id") int userId) {
-        System.out.println("hello");
+    public ResponseEntity<Response<?>> createGame(Authentication authentication, @RequestBody Game game, @PathVariable(name = "user_id") int userId) {
         User playingUser = this.userRepository.findById(userId).orElse(null);
         if (playingUser == null) {
             errorResponse.set("not found");
             return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
         }
+        if (!playingUser.getUsername().equals(authentication.getName())) {
+            errorResponse.set("forbidden request");
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+
         game.setUser(playingUser);
 
         try {
