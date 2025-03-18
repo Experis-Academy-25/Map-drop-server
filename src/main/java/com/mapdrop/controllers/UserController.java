@@ -45,5 +45,31 @@ public class UserController {
         return ResponseEntity.ok(userListResponse);
     }
 
+    @GetMapping("/username/{username}")
+    public ResponseEntity<Response<?>> getUserByUsername(@PathVariable String username) {
+        User user = userRepository.findByUsername(username).orElse(null);
+        if (user == null) {
+            ErrorResponse error = new ErrorResponse();
+            error.set("not found");
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        }
 
+        UserResponse userResponse = new UserResponse();
+        userResponse.set(user);
+        return ResponseEntity.ok(userResponse);
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Response<?>> getUserByEmail(@PathVariable String email) {
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user == null) {
+            ErrorResponse error = new ErrorResponse();
+            error.set("not found");
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        }
+
+        UserResponse userResponse = new UserResponse();
+        userResponse.set(user);
+        return ResponseEntity.ok(userResponse);
+    }
 }
