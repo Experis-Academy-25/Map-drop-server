@@ -14,6 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+
+
 @RestController
 @RequestMapping("games")
 public class GameController {
@@ -34,12 +39,16 @@ public class GameController {
             errorResponse.set("not found");
             return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
         }
+
         if (!playingUser.getUsername().equals(authentication.getName())) {
             errorResponse.set("forbidden request");
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
 
         game.setUser(playingUser);
+        game.setCreatedAt(LocalDateTime.now());
+        game.setUpdatedAt(LocalDateTime.now());
+        playingUser.setTotalPoints(playingUser.getTotalPoints() + game.getPoints());
 
         try {
             gameResponse.set(this.gameRepository.save(game));
@@ -48,5 +57,18 @@ public class GameController {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(gameResponse, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{user_id}/history")
+    public ResponseEntity<Response<?>> getGameHistory(@PathVariable(name = "user_id") int userId) {
+        User playingUser = this.userRepository.findById(userId).orElse(null);
+        if (playingUser == null) {
+            errorResponse.set("not found");
+            return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        }
+        List<Game> history = playingUser.getGamesHistory();
+        Collections.sort(history, Collections.reverseOrder());
+        gameListResponse.set(history.subList(0, 5));
+        return ResponseEntity.ok(gameListResponse);
     }
 }
