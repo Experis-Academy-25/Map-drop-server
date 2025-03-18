@@ -44,6 +44,8 @@ public class User {
 
     private LocalDateTime updatedAt;
 
+    private double totalPoints = 0;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
 //    @JsonManagedReference
     @JsonIgnore

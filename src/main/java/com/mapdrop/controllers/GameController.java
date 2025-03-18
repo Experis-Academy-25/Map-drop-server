@@ -39,9 +39,11 @@ public class GameController {
             errorResponse.set("not found");
             return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
         }
+
         game.setUser(playingUser);
         game.setCreatedAt(LocalDateTime.now());
         game.setUpdatedAt(LocalDateTime.now());
+        playingUser.setTotalPoints(playingUser.getTotalPoints() + game.getPoints());
 
         try {
             gameResponse.set(this.gameRepository.save(game));
