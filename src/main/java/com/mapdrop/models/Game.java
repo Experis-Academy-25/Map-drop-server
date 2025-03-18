@@ -7,11 +7,12 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.time.LocalDateTime;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
 @Table(name = "games")
-public class Game {
+public class Game implements Comparable<Game> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -44,4 +45,12 @@ public class Game {
     }
 
     public Game(int id) {this.id = id; }
+
+    @Override
+    public int compareTo(Game game) {
+        if (getCreatedAt() == null || game.getCreatedAt() == null) {
+            return 0;
+        }
+        return getCreatedAt().compareTo(game.getCreatedAt());
+    }
 }

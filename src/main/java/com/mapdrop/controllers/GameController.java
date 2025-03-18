@@ -13,6 +13,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+
 @RestController
 @RequestMapping("games")
 public class GameController {
@@ -28,13 +34,14 @@ public class GameController {
 
     @PostMapping("{user_id}")
     public ResponseEntity<Response<?>> createGame(@RequestBody Game game, @PathVariable(name = "user_id") int userId) {
-        System.out.println("hello");
         User playingUser = this.userRepository.findById(userId).orElse(null);
         if (playingUser == null) {
             errorResponse.set("not found");
             return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
         }
         game.setUser(playingUser);
+        game.setCreatedAt(LocalDateTime.now());
+        game.setUpdatedAt(LocalDateTime.now());
 
         try {
             gameResponse.set(this.gameRepository.save(game));
@@ -43,5 +50,18 @@ public class GameController {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(gameResponse, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{user_id}/history")
+    public ResponseEntity<Response<?>> getGameHistory(@PathVariable(name = "user_id") int userId) {
+        User playingUser = this.userRepository.findById(userId).orElse(null);
+        if (playingUser == null) {
+            errorResponse.set("not found");
+            return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        }
+        List<Game> history = playingUser.getGamesHistory();
+        Collections.sort(history, Collections.reverseOrder());
+        gameListResponse.set(history.subList(0, 5));
+        return ResponseEntity.ok(gameListResponse);
     }
 }
