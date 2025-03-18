@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("users")
@@ -45,5 +46,31 @@ public class UserController {
         return ResponseEntity.ok(userListResponse);
     }
 
+    @GetMapping("/get_by_username/{username}")
+    public ResponseEntity<Response<?>> getUserByUsername(@PathVariable String username) {
+        User user = userRepository.findByUsername(username).orElse(null);
+        if (user == null) {
+            ErrorResponse error = new ErrorResponse();
+            error.set("not found");
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        }
 
+        UserResponse userResponse = new UserResponse();
+        userResponse.set(user);
+        return ResponseEntity.ok(userResponse);
+    }
+
+    @GetMapping("/get_by_email/{email}")
+    public ResponseEntity<Response<?>> getUserByEmail(@PathVariable String email) {
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user == null) {
+            ErrorResponse error = new ErrorResponse();
+            error.set("not found");
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        }
+
+        UserResponse userResponse = new UserResponse();
+        userResponse.set(user);
+        return ResponseEntity.ok(userResponse);
+    }
 }
