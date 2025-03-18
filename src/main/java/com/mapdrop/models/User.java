@@ -22,7 +22,7 @@ import java.util.Set;
                 @UniqueConstraint(columnNames = "username"),
                 @UniqueConstraint(columnNames = "email")
         })
-public class User {
+public class User implements Comparable<User> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -63,4 +63,11 @@ public class User {
     }
 
     public User(int id) {this.id = id; }
+
+    @Override
+    public int compareTo(User user) {
+        if (getTotalPoints() > user.getTotalPoints()) return 1;
+        else if (getTotalPoints() < user.getTotalPoints()) return -1;
+        return 0;
+    }
 }

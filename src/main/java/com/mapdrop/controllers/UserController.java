@@ -1,9 +1,7 @@
 package com.mapdrop.controllers;
 
 import com.mapdrop.models.User;
-import com.mapdrop.payload.response.ErrorResponse;
-import com.mapdrop.payload.response.Response;
-import com.mapdrop.payload.response.UserResponse;
+import com.mapdrop.payload.response.*;
 import com.mapdrop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,11 +11,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
+import java.util.List;
+
 @RestController
 @RequestMapping("users")
 public class UserController {
     @Autowired
     private UserRepository userRepository;
+
+    private ErrorResponse errorResponse = new ErrorResponse();
+    private UserResponse userResponse = new UserResponse();
+    private UserListResponse userListResponse = new UserListResponse();
 
     @GetMapping("/{id}")
     public ResponseEntity<Response<?>> getUserById(@PathVariable int id) {
@@ -30,6 +35,14 @@ public class UserController {
         UserResponse userResponse = new UserResponse();
         userResponse.set(user);
         return ResponseEntity.ok(userResponse);
+    }
+
+    @GetMapping("/leaderboard")
+    public ResponseEntity<Response<?>> getLeaderboard() {
+        List<User> users = this.userRepository.findAll();
+        Collections.sort(users, Collections.reverseOrder());
+        userListResponse.set(users.subList(0, Math.min(5, users.size())));
+        return ResponseEntity.ok(userListResponse);
     }
 
 
