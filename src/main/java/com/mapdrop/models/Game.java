@@ -27,11 +27,17 @@ public class Game implements Comparable<Game> {
     @Column(name="location")
     private String location;
 
-    @Column(name="coordinate_guess")
-    private Point coordinateGuess;
+    @Column(name="longitude_guess")
+    private double longitude_guess;
 
-    @Column(name="coordinate_real")
-    private Point coordinateReal;
+    @Column(name="latitude_guess")
+    private double latitude_guess;
+
+    @Column(name="longitude_real")
+    private double longitude_real;
+
+    @Column(name="latitude_real")
+    private double latitude_real;
 
     @Column(name="created_at")
     private LocalDateTime createdAt;
