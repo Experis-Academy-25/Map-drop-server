@@ -68,7 +68,7 @@ public class GameController {
         }
         List<Game> history = playingUser.getGamesHistory();
         Collections.sort(history, Collections.reverseOrder());
-        gameListResponse.set(history.subList(0, 5));
+        gameListResponse.set(history.subList(0, Math.min(5, playingUser.getGamesHistory().size())));
         return ResponseEntity.ok(gameListResponse);
     }
 }
