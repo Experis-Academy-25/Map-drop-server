@@ -40,7 +40,7 @@ public class UserController {
     public ResponseEntity<Response<?>> getLeaderboard() {
         List<User> users = this.userRepository.findAll();
         Collections.sort(users, Collections.reverseOrder());
-        userListResponse.set(users.subList(0, Math.min(5, users.size())));
+        userListResponse.set(users);
         return ResponseEntity.ok(userListResponse);
     }
 
