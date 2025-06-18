@@ -5,23 +5,3 @@ server:
     include-binding-errors: always
     include-stacktrace: never
     include-exception: false
-
-spring:
-  datasource:
-    url: jdbc:postgresql://ep-bitter-field-ab2dkf3t-pooler.eu-west-2.aws.neon.tech:5432/neondb
-    username: neondb_owner
-    password: npg_O4Vj3ofZEFKv
-    max-active: 3
-    max-idle: 3
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        format_sql: true
-    show-sql: true
-
-booleanuk:
-  app:
-    jwtSecret: ===============================BooleanUK=Spring==============================================
-    jwtExpirationMs: 86400000
